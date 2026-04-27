@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Petstore API Automation",
+    "_postman_id": "collection-001",
+    "description": "Covers POST and GET APIs with validations and chaining",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST - Add Pet",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/pet",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pet"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": {{petId}},\n  \"name\": \"TestPet\",\n  \"photoUrls\": [\"string\"],\n  \"status\": \"available\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// Generate random petId",
+              "pm.environment.set('petId', Math.floor(Math.random() * 100000));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "",
+              "pm.test('Pet ID is returned', function () {",
+              "    pm.expect(jsonData.id).to.eql(Number(pm.environment.get('petId')));",
+              "});",
+              "",
+              "pm.test('Pet name is correct', function () {",
+              "    pm.expect(jsonData.name).to.eql('TestPet');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - Get Pet by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/pet/{{petId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pet",
+            "{{petId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "",
+              "pm.test('Correct pet is returned', function () {",
+              "    pm.expect(jsonData.id).to.eql(Number(pm.environment.get('petId')));",
+              "});",
+              "",
+              "pm.test('Response has name field', function () {",
+              "    pm.expect(jsonData).to.have.property('name');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://petstore.swagger.io/v2"
+    }
+  ]
+}

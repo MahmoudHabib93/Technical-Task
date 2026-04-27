@@ -1,0 +1,21 @@
+{
+  "customer": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "country": "United States",
+    "city": "New York",
+    "address1": "123 Automation St",
+    "zip": "10001",
+    "phone": "1234567890"
+  },
+  "products": [
+    {
+      "categoryUrl": "/books",
+      "buttonLocator": ".product-item input[value=\"Add to cart\"]"
+    },
+    {
+      "categoryUrl": "/desktops",
+      "buttonLocator": ".product-item input[value=\"Add to cart\"]"
+    }
+  ]
+}
