@@ -45,3 +45,21 @@ jobs:
           name: playwright-report
           path: 1. UI Automation with Playwright TS/playwright-report/
           retention-days: 7
+
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman collection
+        run: newman run "2. API Automation with Postman.json"
